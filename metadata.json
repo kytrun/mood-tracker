@@ -1,0 +1,6 @@
+{
+  "name": "心情日志",
+  "description": "一个记录每天心情的软件，支持通过热力图查看历史心情轨迹与深入的数据统计洞察。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
