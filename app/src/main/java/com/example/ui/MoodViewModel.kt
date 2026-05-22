@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -30,7 +31,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
     val appLanguage: StateFlow<String> = _appLanguage.asStateFlow()
 
     val resolvedLanguage: StateFlow<String> = _appLanguage
-        .combine(repository.allMoods) { lang, _ ->
+        .map { lang ->
             if (lang == I18n.LANG_AUTO) getSystemLanguageCode() else lang
         }
         .stateIn(
@@ -122,7 +123,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
 
     // Map to lookup representative mood entries by date (showing the average rating) for heatmap display
     val moodsByDateMap: StateFlow<Map<String, MoodEntry>> = allMoods
-        .combine(allMoods) { moods, _ ->
+        .map { moods ->
             moods.groupBy { it.date }.mapValues { (date, entries) ->
                 if (entries.isNotEmpty()) {
                     val avgRating = entries.map { it.rating }.average().roundToInt()

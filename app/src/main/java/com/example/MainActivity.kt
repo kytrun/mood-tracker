@@ -84,6 +84,7 @@ fun MoodTrackerAppWithSplash(
     isDark: Boolean
 ) {
     var showSplash by remember { mutableStateOf(true) }
+    val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         delay(1800) // Show stunning launch screen for 1.8 seconds
@@ -98,13 +99,13 @@ fun MoodTrackerAppWithSplash(
             visible = showSplash,
             exit = fadeOut(animationSpec = tween(durationMillis = 600)) + shrinkVertically(animationSpec = tween(durationMillis = 600))
         ) {
-            SplashScreen(isDark = isDark)
+            SplashScreen(isDark = isDark, resolvedLanguage = resolvedLanguage)
         }
     }
 }
 
 @Composable
-fun SplashScreen(isDark: Boolean) {
+fun SplashScreen(isDark: Boolean, resolvedLanguage: String) {
     val bgBrush = if (isDark) {
         Brush.verticalGradient(
             colors = listOf(Color(0xFF0F172A), Color(0xFF020617))
@@ -148,7 +149,7 @@ fun SplashScreen(isDark: Boolean) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.splash_banner_1779432624928),
-                    contentDescription = "启动页面画",
+                    contentDescription = I18n.getText(resolvedLanguage, "splash_content_desc"),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -158,7 +159,7 @@ fun SplashScreen(isDark: Boolean) {
 
             // Text Typography logo
             Text(
-                text = "心情日志",
+                text = I18n.getText(resolvedLanguage, "app_title"),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
                 color = if (isDark) Color.White else Color(0xFF065F46)
@@ -167,7 +168,7 @@ fun SplashScreen(isDark: Boolean) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "遇见情绪，静享生活的每一个故事",
+                text = I18n.getText(resolvedLanguage, "splash_sub"),
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (isDark) Color.White.copy(0.6f) else Color(0xFF0F766E),
                 textAlign = TextAlign.Center
@@ -274,8 +275,8 @@ fun MoodTrackerApp(
                     NavigationBarItem(
                         selected = currentTab == 0,
                         onClick = { viewModel.selectTab(0) },
-                        icon = { Icon(imageVector = Icons.Default.Edit, contentDescription = "记心情") },
-                        label = { Text("记心情", fontWeight = if (currentTab == 0) FontWeight.Bold else FontWeight.Normal) },
+                        icon = { Icon(imageVector = Icons.Default.Edit, contentDescription = I18n.getText(resolvedLanguage, "tab_record")) },
+                        label = { Text(I18n.getText(resolvedLanguage, "tab_record"), fontWeight = if (currentTab == 0) FontWeight.Bold else FontWeight.Normal) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -288,8 +289,8 @@ fun MoodTrackerApp(
                     NavigationBarItem(
                         selected = currentTab == 1,
                         onClick = { viewModel.selectTab(1) },
-                        icon = { Icon(imageVector = Icons.Default.DateRange, contentDescription = "日历大屏") },
-                        label = { Text("今日历", fontWeight = if (currentTab == 1) FontWeight.Bold else FontWeight.Normal) },
+                        icon = { Icon(imageVector = Icons.Default.DateRange, contentDescription = I18n.getText(resolvedLanguage, "tab_calendar")) },
+                        label = { Text(I18n.getText(resolvedLanguage, "tab_calendar"), fontWeight = if (currentTab == 1) FontWeight.Bold else FontWeight.Normal) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -302,8 +303,8 @@ fun MoodTrackerApp(
                     NavigationBarItem(
                         selected = currentTab == 2,
                         onClick = { viewModel.selectTab(2) },
-                        icon = { Icon(imageVector = Icons.Default.Info, contentDescription = "洞察分析") },
-                        label = { Text("析数据", fontWeight = if (currentTab == 2) FontWeight.Bold else FontWeight.Normal) },
+                        icon = { Icon(imageVector = Icons.Default.Info, contentDescription = I18n.getText(resolvedLanguage, "tab_insights")) },
+                        label = { Text(I18n.getText(resolvedLanguage, "tab_insights"), fontWeight = if (currentTab == 2) FontWeight.Bold else FontWeight.Normal) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -504,7 +505,8 @@ fun CalendarTabContent(
         HeatmapCard(
             viewModel = viewModel,
             moodsByDateMap = moodsByDateMap,
-            selectedDate = selectedDate
+            selectedDate = selectedDate,
+            resolvedLanguage = resolvedLanguage
         )
 
         val displayDate = viewModel.formatDisplayDate(selectedDate, resolvedLanguage)
@@ -919,7 +921,8 @@ fun HeaderSection(
 fun HeatmapCard(
     viewModel: MoodViewModel,
     moodsByDateMap: Map<String, MoodEntry>,
-    selectedDate: String
+    selectedDate: String,
+    resolvedLanguage: String
 ) {
     ElevatedCard(
         modifier = Modifier
@@ -940,7 +943,7 @@ fun HeatmapCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "心情热力图 (近半年)",
+                    text = I18n.getText(resolvedLanguage, "cal_heatmap_title"),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -951,31 +954,32 @@ fun HeatmapCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    Text("糟", style = MaterialTheme.typography.bodySmall, fontSize = 9.sp)
+                    Text(I18n.getText(resolvedLanguage, "cal_heatmap_low"), style = MaterialTheme.typography.bodySmall, fontSize = 9.sp)
                     Box(modifier = Modifier.size(8.dp).background(Color(0xFFF87171), RoundedCornerShape(1.5.dp)))
                     Box(modifier = Modifier.size(8.dp).background(Color(0xFF60A5FA), RoundedCornerShape(1.5.dp)))
                     Box(modifier = Modifier.size(8.dp).background(Color(0xFFFBBF24), RoundedCornerShape(1.5.dp)))
                     Box(modifier = Modifier.size(8.dp).background(Color(0xFF34D399), RoundedCornerShape(1.5.dp)))
                     Box(modifier = Modifier.size(8.dp).background(Color(0xFF10B981), RoundedCornerShape(1.5.dp)))
-                    Text("极棒", style = MaterialTheme.typography.bodySmall, fontSize = 9.sp)
+                    Text(I18n.getText(resolvedLanguage, "cal_heatmap_high"), style = MaterialTheme.typography.bodySmall, fontSize = 9.sp)
                 }
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
             // Calendar heatmap view drawing helper
-            val heatmapDates = viewModel.generateHeatmapDates()
+            val heatmapDates = remember { viewModel.generateHeatmapDates() }
             MoodHeatmap(
                 dates = heatmapDates,
                 moodsByDate = moodsByDateMap,
                 selectedDate = selectedDate,
+                resolvedLanguage = resolvedLanguage,
                 onDateSelect = { viewModel.selectDate(it) }
             )
 
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "💡 提示: 点击色块以按天补录或选择修改。日历颜色反映该天各项心情的总平均状态！",
+                text = I18n.getText(resolvedLanguage, "cal_heatmap_tip"),
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 11.sp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
@@ -989,15 +993,18 @@ fun MoodHeatmap(
     dates: List<String>,
     moodsByDate: Map<String, MoodEntry>,
     selectedDate: String,
+    resolvedLanguage: String,
     onDateSelect: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val isDark = isSystemInDarkTheme()
 
-    // Automatically scrolls the heatmap chart to show current date on load
+    // Automatically scrolls the heatmap chart to show current date on load exactly once
+    var hasScrolled by remember { mutableStateOf(false) }
     LaunchedEffect(scrollState.maxValue) {
-        if (scrollState.maxValue > 0) {
+        if (!hasScrolled && scrollState.maxValue > 0) {
             scrollState.scrollTo(scrollState.maxValue)
+            hasScrolled = true
         }
     }
 
@@ -1015,11 +1022,11 @@ fun MoodHeatmap(
             val cellHeight = 14.dp
             val spacing = 4.dp
             Spacer(modifier = Modifier.height(cellHeight + spacing)) // Sun skip label
-            Text("周一", style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(0.6f), modifier = Modifier.height(cellHeight))
+            Text(I18n.getText(resolvedLanguage, "cal_day_mon"), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(0.6f), modifier = Modifier.height(cellHeight))
             Spacer(modifier = Modifier.height(cellHeight + spacing)) // Tue skip label
-            Text("周三", style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(0.6f), modifier = Modifier.height(cellHeight))
+            Text(I18n.getText(resolvedLanguage, "cal_day_wed"), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(0.6f), modifier = Modifier.height(cellHeight))
             Spacer(modifier = Modifier.height(cellHeight + spacing)) // Thu skip label
-            Text("周五", style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(0.6f), modifier = Modifier.height(cellHeight))
+            Text(I18n.getText(resolvedLanguage, "cal_day_fri"), style = MaterialTheme.typography.labelSmall, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(0.6f), modifier = Modifier.height(cellHeight))
             Spacer(modifier = Modifier.height(cellHeight + spacing)) // Sat skip label
         }
 
@@ -1591,7 +1598,14 @@ fun LoggerEditorCard(
                             true
                         ).show()
                     } catch (ex: Exception) {
-                        Toast.makeText(context, "无法打开时间选择器", Toast.LENGTH_SHORT).show()
+                        val errText = when (resolvedLanguage) {
+                            I18n.LANG_EN -> "Could not open time picker"
+                            I18n.LANG_KO -> "시간 선택기를 열 수 없습니다"
+                            I18n.LANG_JA -> "時間選択ダイアログを開けません"
+                            I18n.LANG_ZH_TW -> "無法開啟時間選擇器"
+                            else -> "无法打开时间选择器"
+                        }
+                        Toast.makeText(context, errText, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -1613,7 +1627,7 @@ fun LoggerEditorCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
-                    contentDescription = "选择时钟时间",
+                    contentDescription = I18n.getText(resolvedLanguage, "choose_time"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )

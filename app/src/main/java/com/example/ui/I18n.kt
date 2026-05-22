@@ -108,7 +108,16 @@ object I18n {
 
             "ins_total_records" to "总记录条数",
             "ins_average_rating" to "平均心情得分",
-            "ins_happy_rate" to "心情优良率"
+            "ins_happy_rate" to "心情优良率",
+            "splash_sub" to "遇见情绪，静享生活的每一个故事",
+            "splash_content_desc" to "启动页插画",
+            "cal_heatmap_title" to "心情热力图 (近半年)",
+            "cal_heatmap_low" to "糟",
+            "cal_heatmap_high" to "极棒",
+            "cal_heatmap_tip" to "💡 提示: 点击色块以按天补录或选择修改。日历颜色反映该天各项心情的总平均状态！",
+            "cal_day_mon" to "周一",
+            "cal_day_wed" to "周三",
+            "cal_day_fri" to "周五"
         ),
 
         LANG_ZH_TW to mapOf(
@@ -198,7 +207,16 @@ object I18n {
 
             "ins_total_records" to "總記錄條數",
             "ins_average_rating" to "平均心情得分",
-            "ins_happy_rate" to "心情優良率"
+            "ins_happy_rate" to "心情優良率",
+            "splash_sub" to "遇見情緒，靜享生活的每一個故事",
+            "splash_content_desc" to "啟動頁插畫",
+            "cal_heatmap_title" to "情緒熱力圖 (近半年)",
+            "cal_heatmap_low" to "糟",
+            "cal_heatmap_high" to "極棒",
+            "cal_heatmap_tip" to "💡 提示: 點擊色塊以按天補錄或選擇修改。日曆顏色反映該天各項心情的總平均狀態！",
+            "cal_day_mon" to "週一",
+            "cal_day_wed" to "週三",
+            "cal_day_fri" to "週五"
         ),
 
         LANG_EN to mapOf(
@@ -288,7 +306,16 @@ object I18n {
 
             "ins_total_records" to "Total Records",
             "ins_average_rating" to "Avg Mood Rating",
-            "ins_happy_rate" to "Ratio of Delightness"
+            "ins_happy_rate" to "Ratio of Delightness",
+            "splash_sub" to "Embrace your emotions, enjoy every story of life",
+            "splash_content_desc" to "Splash Screen Illustration",
+            "cal_heatmap_title" to "Mood Heatmap (Recent 6 Months)",
+            "cal_heatmap_low" to "Low",
+            "cal_heatmap_high" to "High",
+            "cal_heatmap_tip" to "💡 Tip: Tap cells to log or edit. The color represents the total average mood of that day!",
+            "cal_day_mon" to "Mon",
+            "cal_day_wed" to "Wed",
+            "cal_day_fri" to "Fri"
         ),
 
         LANG_KO to mapOf(
@@ -378,7 +405,16 @@ object I18n {
 
             "ins_total_records" to "총 누적 일기수",
             "ins_average_rating" to "평균 기분 점수",
-            "ins_happy_rate" to "긍정적 기분 확률"
+            "ins_happy_rate" to "긍정적 기분 확률",
+            "splash_sub" to "나의 감정을 돌아보고, 차분하게 일상을 기록해 보세요",
+            "splash_content_desc" to "스플래시 화면 일러스트",
+            "cal_heatmap_title" to "기분 흐름도 (최근 6개월)",
+            "cal_heatmap_low" to "나쁨",
+            "cal_heatmap_high" to "좋음",
+            "cal_heatmap_tip" to "💡 팁: 색상 타일을 클릭하여 일기를 수정 및 추가할 수 있습니다. 칸 색상은 하루 기록의 총 평균 상태를 표시합니다!",
+            "cal_day_mon" to "월",
+            "cal_day_wed" to "수",
+            "cal_day_fri" to "금"
         ),
 
         LANG_JA to mapOf(
@@ -468,7 +504,16 @@ object I18n {
 
             "ins_total_records" to "総ログ日記数",
             "ins_average_rating" to "平均感情評価",
-            "ins_happy_rate" to "ハッピー率"
+            "ins_happy_rate" to "ハッピー率",
+            "splash_sub" to "感情に向き合い、穏やかな日々を綴りましょう",
+            "splash_content_desc" to "スプラッシュ画面のイラスト",
+            "cal_heatmap_title" to "感情ヒートマップ (この半年)",
+            "cal_heatmap_low" to "低い",
+            "cal_heatmap_high" to "高い",
+            "cal_heatmap_tip" to "💡 ヒント: タイルをタップして新規作成・選択修正できます。タイルの色は、その日の感情の平均状態を表します！",
+            "cal_day_mon" to "月",
+            "cal_day_wed" to "水",
+            "cal_day_fri" to "金"
         )
     )
 
