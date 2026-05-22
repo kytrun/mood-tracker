@@ -1,8 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:width="66dp"
-        android:height="66dp"
-        android:drawable="@drawable/ic_mood_icon_1779432023832"
-        android:gravity="center" />
-</layer-list>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Warm outer glow ring around the center -->
+    <path
+        android:fillColor="#22FFFFFF"
+        android:pathData="M 54,54 M -28,0 A 28,28 0 1,1 28,0 A 28,28 0 1,1 -28,0" />
+
+    <!-- A lovely smiling cloud styled elegantly in pure vector shape -->
+    <!-- Beautiful white core cloud body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,64 L74,64 A 11,11 0 0,0 74,42 A 16,16 0 0,0 44,38 A 11,11 0 0,0 32,50 A 10,10 0 0,0 34,64 Z" />
+
+    <!-- Smiling Eye Left -->
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 42,51 Q 44.5,53.5 47,51" />
+
+    <!-- Smiling Eye Right -->
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 59,51 Q 61.5,53.5 64,51" />
+
+    <!-- Rosy Cheek Left -->
+    <path
+        android:fillColor="#FFD1D1"
+        android:pathData="M 38,54 A 2.2,2.2 0 1,1 38,53.99" />
+
+    <!-- Rosy Cheek Right -->
+    <path
+        android:fillColor="#FFD1D1"
+        android:pathData="M 68,54 A 2.2,2.2 0 1,1 68,53.99" />
+
+    <!-- Sweet Smile in Center -->
+    <path
+        android:strokeColor="#FF6B6B"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 51,57 Q 53,60 55,57" />
+
+    <!-- Big sparkling 4-pointed star above the cloud at top-right (glowing yellow) -->
+    <path
+        android:fillColor="#FFE066"
+        android:pathData="M 76,18 L 78,26 L 86,28 L 78,30 L 76,38 L 74,30 L 66,28 L 74,26 Z" />
+
+    <!-- Small sparkling 4-pointed star at top-left -->
+    <path
+        android:fillColor="#FFE066"
+        android:pathData="M 28,31 L 29.5,36.5 L 35,38 L 29.5,39.5 L 28,45 L 26.5,39.5 L 21,38 L 26.5,36.5 Z" />
+</vector>

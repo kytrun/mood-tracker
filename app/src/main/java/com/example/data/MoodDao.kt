@@ -8,15 +8,18 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MoodDao {
-    @Query("SELECT * FROM mood_entries ORDER BY date DESC")
+    @Query("SELECT * FROM mood_entries ORDER BY date DESC, time DESC")
     fun getAllMoods(): Flow<List<MoodEntry>>
 
-    @Query("SELECT * FROM mood_entries WHERE date = :date LIMIT 1")
-    suspend fun getMoodByDate(date: String): MoodEntry?
+    @Query("SELECT * FROM mood_entries WHERE date = :date ORDER BY time DESC")
+    fun getMoodsByDate(date: String): Flow<List<MoodEntry>>
+
+    @Query("SELECT * FROM mood_entries WHERE id = :id LIMIT 1")
+    suspend fun getMoodById(id: Long): MoodEntry?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMood(moodEntry: MoodEntry)
+    suspend fun insertMood(moodEntry: MoodEntry): Long
 
-    @Query("DELETE FROM mood_entries WHERE date = :date")
-    suspend fun deleteMoodByDate(date: String)
+    @Query("DELETE FROM mood_entries WHERE id = :id")
+    suspend fun deleteMoodById(id: Long)
 }
