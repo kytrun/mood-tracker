@@ -91,6 +91,19 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val dateFormatLock = Any()
+
+    private fun safeFormatDate(date: java.util.Date): String {
+        return synchronized(dateFormatLock) {
+            dateFormat.format(date)
+        }
+    }
+
+    private fun safeParseDate(str: String): java.util.Date? {
+        return synchronized(dateFormatLock) {
+            dateFormat.parse(str)
+        }
+    }
 
     private val _selectedDate = MutableStateFlow(getTodayDateString())
     val selectedDate: StateFlow<String> = _selectedDate.asStateFlow()
@@ -155,9 +168,9 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
         val cal = Calendar.getInstance()
         var streak = 0
         
-        val todayStr = dateFormat.format(cal.time)
+        val todayStr = safeFormatDate(cal.time)
         cal.add(Calendar.DAY_OF_YEAR, -1)
-        val yesterdayStr = dateFormat.format(cal.time)
+        val yesterdayStr = safeFormatDate(cal.time)
         
         // If neither today nor yesterday is logged, the streak is currently 0
         if (!loggedDates.contains(todayStr) && !loggedDates.contains(yesterdayStr)) {
@@ -167,7 +180,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
         // Start counting back from today
         cal.time = Calendar.getInstance().time
         while (true) {
-            val dateStr = dateFormat.format(cal.time)
+            val dateStr = safeFormatDate(cal.time)
             if (loggedDates.contains(dateStr)) {
                 streak++
                 cal.add(Calendar.DAY_OF_YEAR, -1)
@@ -184,13 +197,13 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getTodayDateString(): String {
-        return dateFormat.format(Calendar.getInstance().time)
+        return safeFormatDate(Calendar.getInstance().time)
     }
 
     fun getYesterdayDateString(): String {
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_YEAR, -1)
-        return dateFormat.format(cal.time)
+        return safeFormatDate(cal.time)
     }
 
     fun getCurrentTime24h(): String {
@@ -199,7 +212,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
 
     fun formatDisplayDate(dateStr: String, lang: String): String {
         return try {
-            val date = dateFormat.parse(dateStr)
+            val date = safeParseDate(dateStr)
             val locale = when (lang) {
                 I18n.LANG_ZH_CN -> Locale.SIMPLIFIED_CHINESE
                 I18n.LANG_ZH_TW -> Locale.TRADITIONAL_CHINESE
