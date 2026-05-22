@@ -19,15 +19,51 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 class MoodViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: MoodRepository
+    private val database = MoodDatabase.getDatabase(application)
+    private val repository = MoodRepository(database.moodDao())
     private val prefs = application.getSharedPreferences("mood_app_prefs", android.content.Context.MODE_PRIVATE)
     
     private val _activityTags = MutableStateFlow<List<ActivityTag>>(emptyList())
     val activityTags: StateFlow<List<ActivityTag>> = _activityTags.asStateFlow()
 
+    private val _appLanguage = MutableStateFlow(prefs.getString("app_language", I18n.LANG_AUTO) ?: I18n.LANG_AUTO)
+    val appLanguage: StateFlow<String> = _appLanguage.asStateFlow()
+
+    val resolvedLanguage: StateFlow<String> = _appLanguage
+        .combine(repository.allMoods) { lang, _ ->
+            if (lang == I18n.LANG_AUTO) getSystemLanguageCode() else lang
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = if (prefs.getString("app_language", I18n.LANG_AUTO) == I18n.LANG_AUTO) getSystemLanguageCode() else prefs.getString("app_language", I18n.LANG_AUTO) ?: I18n.LANG_AUTO
+        )
+
+    fun setAppLanguage(lang: String) {
+        _appLanguage.value = lang
+        prefs.edit().putString("app_language", lang).apply()
+    }
+
+    private fun getSystemLanguageCode(): String {
+        val locale = Locale.getDefault()
+        val lang = locale.language
+        val country = locale.country
+        return if (lang == "zh") {
+            if (country == "TW" || country == "HK" || country == "MO") {
+                I18n.LANG_ZH_TW
+            } else {
+                I18n.LANG_ZH_CN
+            }
+        } else if (lang == "ko") {
+            I18n.LANG_KO
+        } else if (lang == "ja") {
+            I18n.LANG_JA
+        } else {
+            I18n.LANG_EN
+        }
+    }
+
     init {
-        val database = MoodDatabase.getDatabase(application)
-        repository = MoodRepository(database.moodDao())
         loadActivityTags()
     }
 
@@ -160,10 +196,23 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
         return SimpleDateFormat("HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
     }
 
-    fun formatDisplayDate(dateStr: String): String {
+    fun formatDisplayDate(dateStr: String, lang: String): String {
         return try {
             val date = dateFormat.parse(dateStr)
-            val displayFormat = SimpleDateFormat("yyyy年M月d日 EEEE", Locale.CHINESE)
+            val locale = when (lang) {
+                I18n.LANG_ZH_CN -> Locale.SIMPLIFIED_CHINESE
+                I18n.LANG_ZH_TW -> Locale.TRADITIONAL_CHINESE
+                I18n.LANG_KO -> Locale.KOREAN
+                I18n.LANG_JA -> Locale.JAPANESE
+                else -> Locale.ENGLISH
+            }
+            val pattern = when (lang) {
+                I18n.LANG_ZH_CN, I18n.LANG_ZH_TW -> "yyyy年M月d日 EEEE"
+                I18n.LANG_JA -> "yyyy年M月d日(E)"
+                I18n.LANG_KO -> "yyyy년 M월 d일(E)"
+                else -> "EEEE, MMM d, yyyy"
+            }
+            val displayFormat = SimpleDateFormat(pattern, locale)
             displayFormat.format(date ?: Calendar.getInstance().time)
         } catch (e: Exception) {
             dateStr
@@ -462,20 +511,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
         saveActivityTagsToPrefs(current)
     }
 
-    companion object {
-        val AVAILABLE_TAGS = listOf(
-            "运动" to "🏃",
-            "美食" to "🍲",
-            "娱乐" to "🎮",
-            "社交" to "👥",
-            "工作" to "💼",
-            "学习" to "📚",
-            "睡眠" to "🛌",
-            "家务" to "🧹",
-            "购物" to "🛍️",
-            "户外" to "🌳"
-        )
-    }
+
 }
 
 data class ActivityTag(val name: String, val emoji: String)
