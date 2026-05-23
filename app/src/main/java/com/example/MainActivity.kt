@@ -83,11 +83,11 @@ fun MoodTrackerAppWithSplash(
     viewModel: MoodViewModel = viewModel(),
     isDark: Boolean
 ) {
-    var showSplash by remember { mutableStateOf(true) }
+    var showSplash by remember { mutableStateOf(false) }
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        delay(1800) // Show stunning launch screen for 1.8 seconds
+        delay(0) // Show stunning launch screen for 0 seconds
         showSplash = false
     }
 
@@ -382,13 +382,6 @@ fun RecordTabContent(
     val scrollState = rememberScrollState()
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
-    val backToTodayText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Today"
-        I18n.LANG_KO -> "오늘로"
-        I18n.LANG_JA -> "今日へ"
-        else -> "回今天"
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -412,14 +405,22 @@ fun RecordTabContent(
                     text = "📅 " + I18n.getText(resolvedLanguage, "current_date_log") + ": " + displayDate,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.weight(1f),
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
 
                 if (selectedDate != viewModel.getTodayDateString()) {
                     TextButton(
-                        onClick = { viewModel.selectDate(viewModel.getTodayDateString()) }
+                        onClick = { viewModel.selectDate(viewModel.getTodayDateString()) },
+                        contentPadding = PaddingValues(horizontal = 8.dp)
                     ) {
-                        Text(backToTodayText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = I18n.getText(resolvedLanguage, "back_to_today"),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
@@ -471,22 +472,6 @@ fun CalendarTabContent(
     val scrollState = rememberScrollState()
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
-    val titleText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Mood Calendar"
-        I18n.LANG_KO -> "기분 캘린더"
-        I18n.LANG_JA -> "感情のカレンダー"
-        I18n.LANG_ZH_TW -> "情緒大屏日曆"
-        else -> "情绪大屏日历"
-    }
-
-    val selectedLabel = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Selected Date"
-        I18n.LANG_KO -> "선택한 날짜"
-        I18n.LANG_JA -> "選択した日付"
-        I18n.LANG_ZH_TW -> "點擊選中"
-        else -> "点击选中"
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -495,7 +480,7 @@ fun CalendarTabContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = titleText,
+            text = I18n.getText(resolvedLanguage, "cal_screen_title"),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
@@ -512,7 +497,7 @@ fun CalendarTabContent(
         val displayDate = viewModel.formatDisplayDate(selectedDate, resolvedLanguage)
         if (displayDate.isNotEmpty()) {
             Text(
-                text = "🗓️ " + selectedLabel + ": " + displayDate,
+                text = "🗓️ " + I18n.getText(resolvedLanguage, "selected_label") + ": " + displayDate,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -551,14 +536,6 @@ fun InsightsTabContent(
     val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
-    val titleText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Insights & Settings"
-        I18n.LANG_KO -> "분석 및 설정"
-        I18n.LANG_JA -> "データ分析と設定"
-        I18n.LANG_ZH_TW -> "情緒統計與設置"
-        else -> "情绪统计与设置"
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -567,7 +544,7 @@ fun InsightsTabContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = titleText,
+            text = I18n.getText(resolvedLanguage, "insights_title_tab"),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
@@ -617,46 +594,6 @@ fun ThemeSettingsCard(
     isDark: Boolean,
     resolvedLanguage: String
 ) {
-    val titleText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Theme & Colors"
-        I18n.LANG_KO -> "테마 설정"
-        I18n.LANG_JA -> "テーマカラー設定"
-        I18n.LANG_ZH_TW -> "主題顏色設置"
-        else -> "主题颜色设置"
-    }
-
-    val descText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Switch the application's appearance here. Toggle between Light/Dark mode, or let the app follow system preferences dynamically."
-        I18n.LANG_KO -> "앱의 테마 스타일을 전환할 수 있습니다. 라이트/다크 모드를 수동으로 고정하거나 시스템 설정을 따르도록 지정할 수 있습니다."
-        I18n.LANG_JA -> "アプリのテーマスタイルを切り替えることができます。ライト・ダークモードを固定するか、システムの設定に自動追従させます。"
-        I18n.LANG_ZH_TW -> "可在太一鍵切換應用的主題風格。您可以手動鎖定淺色/深色，或是讓應用智能跟隨手機系統設定，帶來最適意的視覺體驗。"
-        else -> "可在此一键切换应用的主题风格。您可以手动锁定浅色/深色，或是让应用智能跟随手机系统设定，带来最体贴舒适的视觉体验。"
-    }
-
-    val labelSystem = when (resolvedLanguage) {
-        I18n.LANG_EN -> "🖥️ Auto"
-        I18n.LANG_KO -> "🖥️ 시스템"
-        I18n.LANG_JA -> "🖥️ システム"
-        I18n.LANG_ZH_TW -> "🖥️ 跟隨系統"
-        else -> "🖥️ 跟随系统"
-    }
-
-    val labelLight = when (resolvedLanguage) {
-        I18n.LANG_EN -> "☀️ Light"
-        I18n.LANG_KO -> "☀️ 라이트"
-        I18n.LANG_JA -> "☀️ ライト"
-        I18n.LANG_ZH_TW -> "☀️ 活力日間"
-        else -> "☀️ 活力日间"
-    }
-
-    val labelDark = when (resolvedLanguage) {
-        I18n.LANG_EN -> "🌙 Dark"
-        I18n.LANG_KO -> "🌙 다크"
-        I18n.LANG_JA -> "🌙 ダーク"
-        I18n.LANG_ZH_TW -> "🌙 靜謐夜間"
-        else -> "🌙 静谧夜间"
-    }
-
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -682,7 +619,7 @@ fun ThemeSettingsCard(
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = titleText,
+                    text = I18n.getText(resolvedLanguage, "theme_settings_title"),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -690,7 +627,7 @@ fun ThemeSettingsCard(
             }
 
             Text(
-                text = descText,
+                text = I18n.getText(resolvedLanguage, "theme_settings_desc"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                 lineHeight = 16.sp
@@ -709,9 +646,9 @@ fun ThemeSettingsCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 val modes = listOf(
-                    0 to labelSystem,
-                    1 to labelLight,
-                    2 to labelDark
+                    0 to I18n.getText(resolvedLanguage, "theme_mode_system_label"),
+                    1 to I18n.getText(resolvedLanguage, "theme_mode_light_label"),
+                    2 to I18n.getText(resolvedLanguage, "theme_mode_dark_label")
                 )
 
                 modes.forEach { (modeIdx, label) ->
@@ -756,14 +693,6 @@ fun LanguageSettingsCard(
     resolvedLanguage: String,
     isDark: Boolean
 ) {
-    val titleText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Application Language"
-        I18n.LANG_KO -> "언어 설정 (Language)"
-        I18n.LANG_JA -> "言語設定 (Language)"
-        I18n.LANG_ZH_TW -> "多語言設置"
-        else -> "多语言设置"
-    }
-
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -789,7 +718,7 @@ fun LanguageSettingsCard(
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = titleText,
+                    text = I18n.getText(resolvedLanguage, "lang_settings_card_title"),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -902,13 +831,13 @@ fun HeaderSection(
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = if (resolvedLanguage == I18n.LANG_EN) "$streakCount Days" else if (resolvedLanguage == I18n.LANG_KO) "$streakCount 일" else if (resolvedLanguage == I18n.LANG_JA) "$streakCount 日" else "$streakCount 天",
+                    text = I18n.getText(resolvedLanguage, "streak_days_count").format(streakCount),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = if (streakCount > 0) Color(0xFFD84315) else MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = if (resolvedLanguage == I18n.LANG_EN) "Streak" else if (resolvedLanguage == I18n.LANG_KO) "연속기록" else if (resolvedLanguage == I18n.LANG_JA) "連続打刻" else "连续打卡",
+                    text = I18n.getText(resolvedLanguage, "streak_label"),
                     fontSize = 8.sp,
                     color = if (streakCount > 0) Color(0xFFD84315).copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
@@ -1097,38 +1026,6 @@ fun LoggedMoodsListCard(
     onStartNewEntry: () -> Unit,
     resolvedLanguage: String
 ) {
-    val loggedTitle = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Logged Moods (${moodsOfSelectedDate.size})"
-        I18n.LANG_KO -> "기록된 기분 (${moodsOfSelectedDate.size})"
-        I18n.LANG_JA -> "記録された感情 (${moodsOfSelectedDate.size})"
-        I18n.LANG_ZH_TW -> "已記錄心情 (${moodsOfSelectedDate.size})"
-        else -> "已记录心情 (${moodsOfSelectedDate.size})"
-    }
-
-    val addNewText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Add New"
-        I18n.LANG_KO -> "새로 추가"
-        I18n.LANG_JA -> "新規追加"
-        I18n.LANG_ZH_TW -> "新增一條"
-        else -> "新增一条"
-    }
-
-    val emptyMsg1 = when (resolvedLanguage) {
-        I18n.LANG_EN -> "☕ No mood entries for this day yet"
-        I18n.LANG_KO -> "☕ 이날 기록된 기분이 아직 없습니다"
-        I18n.LANG_JA -> "☕ この日の感情記録はまだありません"
-        I18n.LANG_ZH_TW -> "☕ 這一天還沒有添加任何心情日誌哦"
-        else -> "☕ 这一天还没有添加任何心情日志哦"
-    }
-
-    val emptyMsg2 = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Tap below to log your current feelings!"
-        I18n.LANG_KO -> "아래 양식을 탭하여 기분을 기록해 보세요!"
-        I18n.LANG_JA -> "下のフォームに入力して感情を記録しましょう！"
-        I18n.LANG_ZH_TW -> "點擊下方表單錄入這一刻的心情吧！"
-        else -> "点击下方表单录入这一刻的心情吧！"
-    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -1147,7 +1044,7 @@ fun LoggedMoodsListCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = loggedTitle,
+                    text = I18n.getText(resolvedLanguage, "logged_moods_title_pattern").format(moodsOfSelectedDate.size),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -1164,7 +1061,7 @@ fun LoggedMoodsListCard(
                     contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp)
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "新增记事", modifier = Modifier.size(16.dp))
-                    Text(addNewText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(I18n.getText(resolvedLanguage, "btn_add_new"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -1183,8 +1080,8 @@ fun LoggedMoodsListCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(emptyMsg1, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
-                        Text(emptyMsg2, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
+                        Text(I18n.getText(resolvedLanguage, "no_moods_today_msg1"), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                        Text(I18n.getText(resolvedLanguage, "no_moods_today_msg2"), fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f))
                     }
                 }
             } else {
@@ -1356,99 +1253,14 @@ fun LoggerEditorCard(
 ) {
     val isEditMode = selectedMoodId != null
 
-    val cardTitle = if (isEditMode) {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "✏️ Edit Mood Entry"
-            I18n.LANG_KO -> "✏️ 기분 기록 편집"
-            I18n.LANG_JA -> "✏️ 記録を編集"
-            I18n.LANG_ZH_TW -> "✏️ 編輯心情記錄"
-            else -> "✏️ 编辑心情记录"
-        }
-    } else {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "📝 Add Mood Entry"
-            I18n.LANG_KO -> "📝 기분 기록하기"
-            I18n.LANG_JA -> "📝 感情を記録しにいく"
-            I18n.LANG_ZH_TW -> "📝 添加新心情日誌"
-            else -> "📝 添加新心情日志"
-        }
-    }
-
-    val cardDesc = if (isEditMode) {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "Save directly overwrites past notes and time"
-            I18n.LANG_KO -> "저장 시 기존의 정보와 시간이 덮어써집니다"
-            I18n.LANG_JA -> "保存すると、以前の記録と時間が上書きされます"
-            I18n.LANG_ZH_TW -> "保存可直接覆蓋記錄資訊和時間"
-            else -> "保存可直接覆盖记录信息和时间"
-        }
-    } else {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "Select an emoji and set the correct time"
-            I18n.LANG_KO -> "기분을 나타내는 이모지를 선택하고 정확한 시간을 지정하세요"
-            I18n.LANG_JA -> "絵文字を選択して時間を設定します"
-            I18n.LANG_ZH_TW -> "選擇描述情緒並指定具體的關聯時鐘"
-            else -> "选择描述情绪并指定具体的关联时钟"
-        }
-    }
-
-    val cancelText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Cancel"
-        I18n.LANG_KO -> "취소"
-        I18n.LANG_JA -> "キャンセル"
-        I18n.LANG_ZH_TW -> "放棄修改"
-        else -> "放弃修改"
-    }
-
-    val selectTimeText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Associated Time (24h)"
-        I18n.LANG_KO -> "연관된 시간 (24시간제)"
-        I18n.LANG_JA -> "関連する時間 (24時間表記)"
-        I18n.LANG_ZH_TW -> "關聯時間點 (24小時制)"
-        else -> "关联时间点 (24小时制)"
-    }
-
-    val changeTimeButtonText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Change"
-        I18n.LANG_KO -> "시간 수정"
-        I18n.LANG_JA -> "時間変更"
-        I18n.LANG_ZH_TW -> "修改時間"
-        else -> "修改时间"
-    }
-
-    val doingWhatText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "What are you doing? (Select multiple)"
-        I18n.LANG_KO -> "이 순간 무엇을 하고 있었나요? (중복 선택 가능)"
-        I18n.LANG_JA -> "何をしていますか？(複数選択可)"
-        I18n.LANG_ZH_TW -> "這一刻正在做什麼呢？(可多選)"
-        else -> "这一刻正在做什么呢？(可多选)"
-    }
-
-    val notePlaceholder = when (resolvedLanguage) {
-        I18n.LANG_EN -> "What's happening? Happy or sad, write down your thoughts..."
-        I18n.LANG_KO -> "이 순간 무슨 일이 있었나요? 기쁘거나 슬픈 이야기를 기록해 보세요..."
-        I18n.LANG_JA -> "何がありましたか？嬉しかったことや落ち込んだことなど、自由に記述してください..."
-        I18n.LANG_ZH_TW -> "這一刻發生了些什麼？開心或低落，都分享記下吧 (選填 200字內)"
-        else -> "这一刻发生了些什么？开心或低落，都分享记下吧 (选填 200字内)"
-    }
-
-    val saveButtonText = if (isEditMode) {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "Confirm Changes"
-            I18n.LANG_KO -> "변경 완료"
-            I18n.LANG_JA -> "変更内容を保存"
-            I18n.LANG_ZH_TW -> "確認保存修改"
-            else -> "确认保存修改"
-        }
-    } else {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "Save My Mood"
-            I18n.LANG_KO -> "기분 기록 저장"
-            I18n.LANG_JA -> "感情を記録する"
-            I18n.LANG_ZH_TW -> "保存此刻心情"
-            else -> "保存此刻心情"
-        }
-    }
+    val cardTitle = I18n.getText(resolvedLanguage, if (isEditMode) "editor_edit_title" else "editor_add_title")
+    val cardDesc = I18n.getText(resolvedLanguage, if (isEditMode) "editor_edit_desc" else "editor_add_desc")
+    val cancelText = I18n.getText(resolvedLanguage, "btn_cancel_edit")
+    val selectTimeText = I18n.getText(resolvedLanguage, "editor_label_time")
+    val changeTimeButtonText = I18n.getText(resolvedLanguage, "btn_change_time")
+    val doingWhatText = I18n.getText(resolvedLanguage, "editor_label_doing_what")
+    val notePlaceholder = I18n.getText(resolvedLanguage, "editor_placeholder_note")
+    val saveButtonText = I18n.getText(resolvedLanguage, if (isEditMode) "btn_confirm_changes" else "btn_save_my_mood")
 
     Card(
         modifier = Modifier
@@ -1797,81 +1609,15 @@ fun StatisticsCard(
     activityTags: List<com.example.ui.ActivityTag>,
     resolvedLanguage: String
 ) {
-    val cardTitle = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Mood Trends & Insights"
-        I18n.LANG_KO -> "기분 통계 및 인사이트"
-        I18n.LANG_JA -> "気分傾向と統計"
-        I18n.LANG_ZH_TW -> "心情軌跡統計與洞察"
-        else -> "心情轨迹统计与洞察"
-    }
-
-    val cardSub = when (resolvedLanguage) {
-        I18n.LANG_EN -> "See how your activities dynamically impact your mental state"
-        I18n.LANG_KO -> "어떤 활동이 통계적으로 기분에 영향을 주는지 분석하세요"
-        I18n.LANG_JA -> "どのような活動があなたの感情に影響しているかを分析します"
-        I18n.LANG_ZH_TW -> "瞭解您過去行為活動如何影響您的心理狀態"
-        else -> "了解您过去行为活动如何影响您的心理状态"
-    }
-
-    val emptyMsg = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Not enough mood records to display insights yet"
-        I18n.LANG_KO -> "통계를 생성할 만큼의 기분 데이터가 충분하지 않습니다"
-        I18n.LANG_JA -> "統計を表示するのに十分なデータがありません"
-        I18n.LANG_ZH_TW -> "暫無充足的心情數據來進行圖表統計"
-        else -> "暂无充足的心情数据来进行图表统计"
-    }
-
-    val totalLogsLabel = when (resolvedLanguage) {
-         I18n.LANG_EN -> "Total Mood Logs"
-         I18n.LANG_KO -> "기분 기록 수"
-         I18n.LANG_JA -> "総感情記録数"
-         I18n.LANG_ZH_TW -> "總心情記錄條數"
-         else -> "总心情记录条数"
-    }
-
-    val totalLogsValue = { count: Int ->
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "$count logs"
-            I18n.LANG_KO -> "$count 개"
-            I18n.LANG_JA -> "$count 件"
-            I18n.LANG_ZH_TW -> "$count 條"
-            else -> "$count 条"
-        }
-    }
-
-    val avgMoodLabel = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Average Mood Rating"
-        I18n.LANG_KO -> "평균 기분 지수"
-        I18n.LANG_JA -> "平均感情指数"
-        I18n.LANG_ZH_TW -> "平均心情指數"
-        else -> "平均心情指数"
-    }
-
-    val distributionLabel = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Mood Distribution Ratio"
-        I18n.LANG_KO -> "기분 상태 분포 비율"
-        I18n.LANG_JA -> "感情レベルの構成比率"
-        I18n.LANG_ZH_TW -> "心情級別構成比例"
-        else -> "心情级别构成比例"
-    }
-
-    val driversLabel = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Most Frequent Activity Drivers"
-        I18n.LANG_KO -> "가장 빈번한 활동 요소"
-        I18n.LANG_JA -> "顕著な活動要因"
-        I18n.LANG_ZH_TW -> "情緒最頻繁的活動因素"
-        else -> "情绪最频繁的活动因素"
-    }
-
-    val associatedLabel = { freq: Int ->
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "$freq logs"
-            I18n.LANG_KO -> "$freq 회 연관"
-            I18n.LANG_JA -> "$freq 件関連"
-            I18n.LANG_ZH_TW -> "關聯 $freq 條"
-            else -> "关联 $freq 条"
-        }
-    }
+    val cardTitle = I18n.getText(resolvedLanguage, "stats_card_title")
+    val cardSub = I18n.getText(resolvedLanguage, "stats_card_subtitle")
+    val emptyMsg = I18n.getText(resolvedLanguage, "stats_empty_msg")
+    val totalLogsLabel = I18n.getText(resolvedLanguage, "stats_total_logs_label")
+    val totalLogsValue = { count: Int -> I18n.getText(resolvedLanguage, "stats_total_logs_pattern").format(count) }
+    val avgMoodLabel = I18n.getText(resolvedLanguage, "stats_avg_mood_label")
+    val distributionLabel = I18n.getText(resolvedLanguage, "stats_distribution_label")
+    val driversLabel = I18n.getText(resolvedLanguage, "stats_drivers_label")
+    val associatedLabel = { freq: Int -> I18n.getText(resolvedLanguage, "stats_associated_pattern").format(freq) }
 
     Card(
         modifier = Modifier
@@ -2148,38 +1894,6 @@ fun BackupSettingsCard(
     onImport: () -> Unit,
     resolvedLanguage: String
 ) {
-    val cardTitle = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Backup & Restore"
-        I18n.LANG_KO -> "데이터 백업 및 복원"
-        I18n.LANG_JA -> "バックアップと復元"
-        I18n.LANG_ZH_TW -> "系統數據備份與還原"
-        else -> "系统数据备份与还原"
-    }
-
-    val cardDesc = when (resolvedLanguage) {
-        I18n.LANG_EN -> "You can export your mood logs and custom activities as a local JSON backup, or import from an existing file. All data is saved on device for total privacy."
-        I18n.LANG_KO -> "기분 기록과 가 활동 목록 정보를 로컬 JSON 파일로 백업하거나 가져와서 복원할 수 있습니다. 모든 개인 정보는 기기에 로컬로만 보호됩니다."
-        I18n.LANG_JA -> "感情ログやカスタムアクティビティをローカルのJSON形式でバックアップ、または復元が可能です。データは端末内にのみ保存されるため安心です。"
-        I18n.LANG_ZH_TW -> "您可以將心情數據以及自定義活動與表情導出為本地備份 JSON 文件，或從備份文件中還原。數據完全保存在本地端，深度保障您的隱私安全。"
-        else -> "您可以将心情数据以及自定义活动与表情导出为本地备份 JSON 文件，或从备份文件中还原。数据完全保存在本地端，深度保障您的隐私安全。"
-    }
-
-    val exportText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Export Backup"
-        I18n.LANG_KO -> "백업 내보내기"
-        I18n.LANG_JA -> "バックアップ出力"
-        I18n.LANG_ZH_TW -> "導出備份"
-        else -> "导出备份"
-    }
-
-    val importText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Import Restore"
-        I18n.LANG_KO -> "가져오기 복원"
-        I18n.LANG_JA -> "インポート復元"
-        I18n.LANG_ZH_TW -> "導入還原"
-        else -> "导入还原"
-    }
-
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -2205,7 +1919,7 @@ fun BackupSettingsCard(
                     modifier = Modifier.size(22.dp)
                 )
                 Text(
-                    text = cardTitle,
+                    text = I18n.getText(resolvedLanguage, "backup_title"),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -2213,7 +1927,7 @@ fun BackupSettingsCard(
             }
 
             Text(
-                text = cardDesc,
+                text = I18n.getText(resolvedLanguage, "backup_desc"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
@@ -2233,7 +1947,7 @@ fun BackupSettingsCard(
                 ) {
                     Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "导出", modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(exportText, fontWeight = FontWeight.Bold)
+                    Text(I18n.getText(resolvedLanguage, "btn_export"), fontWeight = FontWeight.Bold)
                 }
 
                 Button(
@@ -2247,7 +1961,7 @@ fun BackupSettingsCard(
                 ) {
                     Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "导入", modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(importText, fontWeight = FontWeight.Bold)
+                    Text(I18n.getText(resolvedLanguage, "btn_import"), fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -2268,135 +1982,25 @@ fun ActivityTagsManagerCard(
     var tagEmojiInput by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    val cardTitle = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Activity Category Setup"
-        I18n.LANG_KO -> "활동 카테고리 설정"
-        I18n.LANG_JA -> "アクティビティ管理設定"
-        I18n.LANG_ZH_TW -> "活動圖標與類型管理"
-        else -> "活动图标与类型管理"
-    }
+    val cardTitle = I18n.getText(resolvedLanguage, "tag_manager_title")
+    val cardDesc = I18n.getText(resolvedLanguage, "tag_manager_desc")
 
-    val cardDesc = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Tap an existing activity to edit or delete it. Emojis are recommended for custom icons."
-        I18n.LANG_KO -> "기존 활동을 탭하여 수정하거나 삭제할 수 있습니다. 이미지는 터치 시 이모지로 지정하는 걸 권장합니다."
-        I18n.LANG_JA -> "既存のカテゴリをタップして編集、または削除できます。絵文字を入力するのがおすすめです。"
-        I18n.LANG_ZH_TW -> "點擊已存在的活動來進行編輯修改，或進行單獨刪除。圖標輸入欄推薦填入表情符號（Emoji）。"
-        else -> "点击已存在的活动来进行编辑修改，或进行单独删除。图标输入栏推荐填入表情符号（Emoji）。"
-    }
+    val panelHeader = I18n.getText(resolvedLanguage, if (editingTag != null) "tag_panel_edit" else "tag_panel_add")
+    val emojiLabel = I18n.getText(resolvedLanguage, "tag_label_emoji")
+    val nameLabel = I18n.getText(resolvedLanguage, "tag_label_name")
+    val namePlaceholder = I18n.getText(resolvedLanguage, "tag_placeholder_name")
+    val deleteBtnText = I18n.getText(resolvedLanguage, "btn_tag_delete")
 
-    val panelHeader = if (editingTag != null) {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "✏️ Modify Current Activity"
-            I18n.LANG_KO -> "✏️ 활동 정보 편집"
-            I18n.LANG_JA -> "✏️ 選択中カテゴリを編集"
-            I18n.LANG_ZH_TW -> "✏️ 修改當前活動"
-            else -> "✏️ 修改当前活动"
-        }
-    } else {
-        when (resolvedLanguage) {
-            I18n.LANG_EN -> "➕ Define New Activity"
-            I18n.LANG_KO -> "➕ 활동 정보 추가"
-            I18n.LANG_JA -> "➕ 新規カテゴリ登録"
-            I18n.LANG_ZH_TW -> "➕ 自定義一個新活動"
-            else -> "➕ 自定义一个新活动"
-        }
-    }
+    val cancelText = I18n.getText(resolvedLanguage, "btn_tag_cancel")
+    val saveBtnText = I18n.getText(resolvedLanguage, "btn_tag_save")
+    val createBtnText = I18n.getText(resolvedLanguage, "btn_tag_add")
 
-    val emojiLabel = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Icon"
-        I18n.LANG_KO -> "아이콘"
-        I18n.LANG_JA -> "マーク"
-        I18n.LANG_ZH_TW -> "圖標"
-        else -> "图标"
-    }
+    val msgDeleted = I18n.getText(resolvedLanguage, "toast_tag_delete_success")
+    val msgUpdated = I18n.getText(resolvedLanguage, "toast_tag_update_success")
 
-    val nameLabel = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Name"
-        I18n.LANG_KO -> "활동명"
-        I18n.LANG_JA -> "名称"
-        I18n.LANG_ZH_TW -> "活動名"
-        else -> "活动名"
-    }
-
-    val namePlaceholder = when (resolvedLanguage) {
-        I18n.LANG_EN -> "e.g. running"
-        I18n.LANG_KO -> "예: 자전거"
-        I18n.LANG_JA -> "例: サイクリング"
-        I18n.LANG_ZH_TW -> "例如 騎行"
-        else -> "例如 骑行"
-    }
-
-    val deleteBtnText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "🗑️ Delete"
-        I18n.LANG_KO -> "🗑️ 삭제"
-        I18n.LANG_JA -> "🗑️ 削除"
-        I18n.LANG_ZH_TW -> "🗑️ 直接刪除"
-        else -> "🗑️ 直接删除"
-    }
-
-    val cancelText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Cancel"
-        I18n.LANG_KO -> "취소"
-        I18n.LANG_JA -> "キャンセル"
-        I18n.LANG_ZH_TW -> "取消"
-        else -> "取消"
-    }
-
-    val saveBtnText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Save"
-        I18n.LANG_KO -> "저장"
-        I18n.LANG_JA -> "保存"
-        I18n.LANG_ZH_TW -> "保存修改"
-        else -> "保存修改"
-    }
-
-    val createBtnText = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Add & Create"
-        I18n.LANG_KO -> "추가 완료"
-        I18n.LANG_JA -> "登録する"
-        I18n.LANG_ZH_TW -> "添加並建立"
-        else -> "添加并建立"
-    }
-
-    val msgDeleted = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Successfully deleted: "
-        I18n.LANG_KO -> "성공적으로 삭제되었습니다: "
-        I18n.LANG_JA -> "削除しました: "
-        I18n.LANG_ZH_TW -> "已成功刪除活動: "
-        else -> "已成功删除活动: "
-    }
-
-    val msgUpdated = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Updated successfully! ✨"
-        I18n.LANG_KO -> "성공적으로 업데이트되었습니다! ✨"
-        I18n.LANG_JA -> "更新されました！✨"
-        I18n.LANG_ZH_TW -> "更新活動成功！✨"
-        else -> "更新活动成功！✨"
-    }
-
-    val msgUpdateFailed = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Failed to update: empty or duplicate name"
-        I18n.LANG_KO -> "업데이트 실패: 중복 또는 입력 빈칸 오류"
-        I18n.LANG_JA -> "更新に失敗しました。重複しているか、入力欄が空白です。"
-        I18n.LANG_ZH_TW -> "更新失敗，重名或字段為空"
-        else -> "更新失败，重名或字段为空"
-    }
-
-    val msgCreated = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Created successfully! ✨"
-        I18n.LANG_KO -> "성공적으로 추가되었습니다! ✨"
-        I18n.LANG_JA -> "登録されました！✨"
-        I18n.LANG_ZH_TW -> "添加活動成功！✨"
-        else -> "添加活动成功！✨"
-    }
-
-    val msgCreateFailed = when (resolvedLanguage) {
-        I18n.LANG_EN -> "Failed to add: empty or duplicate name"
-        I18n.LANG_KO -> "추가 실패: 중복 또는 입력 빈칸 오류"
-        I18n.LANG_JA -> "登録に失敗しました。重複しているか、入力欄が空白です。"
-        I18n.LANG_ZH_TW -> "添加失敗，重名或欄位為空"
-        else -> "添加失败，重名或字段为空"
-    }
+    val msgUpdateFailed = I18n.getText(resolvedLanguage, "toast_tag_update_error")
+    val msgCreated = I18n.getText(resolvedLanguage, "toast_tag_add_success")
+    val msgCreateFailed = I18n.getText(resolvedLanguage, "toast_tag_add_error")
 
     ElevatedCard(
         modifier = Modifier
