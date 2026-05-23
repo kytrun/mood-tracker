@@ -83,11 +83,11 @@ fun MoodTrackerAppWithSplash(
     viewModel: MoodViewModel = viewModel(),
     isDark: Boolean
 ) {
-    var showSplash by remember { mutableStateOf(false) }
+    var showSplash by remember { mutableStateOf(true) }
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        delay(0) // Show stunning launch screen for 0 seconds
+        delay(500) // Show stunning launch screen for 0 seconds
         showSplash = false
     }
 
