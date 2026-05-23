@@ -87,7 +87,7 @@ fun MoodTrackerAppWithSplash(
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        delay(0) // Show stunning launch screen for 0 seconds
+        delay(800) // Show stunning launch screen for 0 seconds
         showSplash = false
     }
 
