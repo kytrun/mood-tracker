@@ -87,7 +87,7 @@ fun MoodTrackerAppWithSplash(
     val resolvedLanguage by viewModel.resolvedLanguage.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        delay(500) // Show stunning launch screen for 0 seconds
+        delay(0) // Show stunning launch screen for 0 seconds
         showSplash = false
     }
 
@@ -396,31 +396,63 @@ fun RecordTabContent(
 
         val displayDate = viewModel.formatDisplayDate(selectedDate, resolvedLanguage)
         if (displayDate.isNotEmpty()) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "📅 " + I18n.getText(resolvedLanguage, "current_date_log") + ": " + displayDate,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.weight(1f),
-                    maxLines = 1,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 0.dp)
+                    .testTag("current_date_selection_card"),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
-
-                if (selectedDate != viewModel.getTodayDateString()) {
-                    TextButton(
-                        onClick = { viewModel.selectDate(viewModel.getTodayDateString()) },
-                        contentPadding = PaddingValues(horizontal = 8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = I18n.getText(resolvedLanguage, "back_to_today"),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
+                            text = "📅",
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(bottom = 2.dp)
                         )
+                        Text(
+                            text = displayDate,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                        )
+                    }
+
+                    if (selectedDate != viewModel.getTodayDateString()) {
+                        Button(
+                            onClick = { viewModel.selectDate(viewModel.getTodayDateString()) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            shape = RoundedCornerShape(10.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                            modifier = Modifier
+                                .height(32.dp)
+                                .testTag("back_to_today_btn")
+                        ) {
+                            Text(
+                                text = I18n.getText(resolvedLanguage, "back_to_today"),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
@@ -614,7 +646,7 @@ fun ThemeSettingsCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Settings,
-                    contentDescription = "风格设置",
+                    contentDescription = I18n.getText(resolvedLanguage, "content_desc_theme_settings"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
@@ -713,7 +745,7 @@ fun LanguageSettingsCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "语言设置",
+                    contentDescription = I18n.getText(resolvedLanguage, "content_desc_lang_settings"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
@@ -727,11 +759,11 @@ fun LanguageSettingsCard(
 
             val languages = listOf(
                 I18n.LANG_AUTO to I18n.getText(resolvedLanguage, "lang_auto"),
-                I18n.LANG_ZH_CN to "简体中文",
-                I18n.LANG_ZH_TW to "繁體中文",
-                I18n.LANG_EN to "English",
-                I18n.LANG_KO to "한국어",
-                I18n.LANG_JA to "日本語"
+                I18n.LANG_ZH_CN to I18n.getText(resolvedLanguage, "lang_zh_cn_display"),
+                I18n.LANG_ZH_TW to I18n.getText(resolvedLanguage, "lang_zh_tw_display"),
+                I18n.LANG_EN to I18n.getText(resolvedLanguage, "lang_en_display"),
+                I18n.LANG_KO to I18n.getText(resolvedLanguage, "lang_ko_display"),
+                I18n.LANG_JA to I18n.getText(resolvedLanguage, "lang_ja_display")
             )
 
             Column(
@@ -1060,7 +1092,7 @@ fun LoggedMoodsListCard(
                     shape = RoundedCornerShape(8.dp),
                     contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "新增记事", modifier = Modifier.size(16.dp))
+                    Icon(imageVector = Icons.Default.Add, contentDescription = I18n.getText(resolvedLanguage, "content_desc_add_note"), modifier = Modifier.size(16.dp))
                     Text(I18n.getText(resolvedLanguage, "btn_add_new"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
@@ -1204,7 +1236,7 @@ fun LoggedMoodsListCard(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Edit,
-                                        contentDescription = "修改记录详情",
+                                        contentDescription = I18n.getText(resolvedLanguage, "content_desc_modify_detail"),
                                         tint = MaterialTheme.colorScheme.primary.copy(0.7f),
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -1215,7 +1247,7 @@ fun LoggedMoodsListCard(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Delete,
-                                        contentDescription = "直接移除此情绪",
+                                        contentDescription = I18n.getText(resolvedLanguage, "content_desc_remove_mood"),
                                         tint = MaterialTheme.colorScheme.error.copy(0.7f),
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -1410,13 +1442,7 @@ fun LoggerEditorCard(
                             true
                         ).show()
                     } catch (ex: Exception) {
-                        val errText = when (resolvedLanguage) {
-                            I18n.LANG_EN -> "Could not open time picker"
-                            I18n.LANG_KO -> "시간 선택기를 열 수 없습니다"
-                            I18n.LANG_JA -> "時間選択ダイアログを開けません"
-                            I18n.LANG_ZH_TW -> "無法開啟時間選擇器"
-                            else -> "无法打开时间选择器"
-                        }
+                        val errText = I18n.getText(resolvedLanguage, "err_time_picker_failed")
                         Toast.makeText(context, errText, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -1571,7 +1597,7 @@ fun LoggerEditorCard(
                             .height(48.dp)
                             .testTag("delete_mood_btn")
                     ) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "删除心情日志")
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = I18n.getText(resolvedLanguage, "content_desc_delete_mood_log"))
                     }
                 }
 
@@ -1589,7 +1615,7 @@ fun LoggerEditorCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "保存心情",
+                        contentDescription = I18n.getText(resolvedLanguage, "content_desc_save_mood"),
                         modifier = Modifier.padding(end = 6.dp)
                     )
                     Text(
@@ -1657,7 +1683,7 @@ fun StatisticsCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "未获取到分析记录",
+                        contentDescription = I18n.getText(resolvedLanguage, "content_desc_empty_analysis"),
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
                         modifier = Modifier.size(36.dp)
                     )
@@ -1914,7 +1940,7 @@ fun BackupSettingsCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Share,
-                    contentDescription = "数据备份",
+                    contentDescription = I18n.getText(resolvedLanguage, "content_desc_data_backup"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(22.dp)
                 )
@@ -1945,7 +1971,7 @@ fun BackupSettingsCard(
                     ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "导出", modifier = Modifier.size(18.dp))
+                    Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = I18n.getText(resolvedLanguage, "content_desc_export"), modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(I18n.getText(resolvedLanguage, "btn_export"), fontWeight = FontWeight.Bold)
                 }
@@ -1959,7 +1985,7 @@ fun BackupSettingsCard(
                     ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "导入", modifier = Modifier.size(18.dp))
+                    Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = I18n.getText(resolvedLanguage, "content_desc_import"), modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(I18n.getText(resolvedLanguage, "btn_import"), fontWeight = FontWeight.Bold)
                 }
@@ -2022,7 +2048,7 @@ fun ActivityTagsManagerCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.List,
-                    contentDescription = "活动标签类别",
+                    contentDescription = I18n.getText(resolvedLanguage, "content_desc_activity_tag_category"),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(22.dp)
                 )

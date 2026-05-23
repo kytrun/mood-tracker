@@ -155,7 +155,24 @@ object I18n {
             "stats_avg_mood_label" to "平均心情指数",
             "stats_distribution_label" to "心情级别构成比例",
             "stats_drivers_label" to "情绪最频繁的活动因素",
-            "stats_associated_pattern" to "关联 %d 条"
+            "stats_associated_pattern" to "关联 %d 条",
+            "content_desc_theme_settings" to "风格设置",
+            "content_desc_lang_settings" to "语言设置",
+            "lang_zh_cn_display" to "简体中文",
+            "lang_zh_tw_display" to "繁體中文",
+            "lang_en_display" to "English",
+            "lang_ko_display" to "한국어",
+            "lang_ja_display" to "日本語",
+            "content_desc_add_note" to "新增记事",
+            "content_desc_modify_detail" to "修改记录详情",
+            "content_desc_remove_mood" to "直接移除此情绪",
+            "content_desc_delete_mood_log" to "删除心情日志",
+            "content_desc_save_mood" to "保存心情",
+            "content_desc_empty_analysis" to "未获取到分析记录",
+            "content_desc_data_backup" to "数据备份",
+            "content_desc_export" to "导出",
+            "content_desc_import" to "导入",
+            "content_desc_activity_tag_category" to "活动标签类别"
         ),
 
         LANG_ZH_TW to mapOf(
@@ -292,7 +309,24 @@ object I18n {
             "stats_avg_mood_label" to "平均心情指數",
             "stats_distribution_label" to "心情級別構成比例",
             "stats_drivers_label" to "情緒最頻繁的活動因素",
-            "stats_associated_pattern" to "關聯 %d 條"
+            "stats_associated_pattern" to "關聯 %d 條",
+            "content_desc_theme_settings" to "風格設置",
+            "content_desc_lang_settings" to "語言設置",
+            "lang_zh_cn_display" to "简体中文",
+            "lang_zh_tw_display" to "繁體中文",
+            "lang_en_display" to "English",
+            "lang_ko_display" to "한국어",
+            "lang_ja_display" to "日本語",
+            "content_desc_add_note" to "新增記事",
+            "content_desc_modify_detail" to "修改記錄詳情",
+            "content_desc_remove_mood" to "直接移除此情緒",
+            "content_desc_delete_mood_log" to "刪除心情日誌",
+            "content_desc_save_mood" to "保存心情",
+            "content_desc_empty_analysis" to "未獲取到分析記錄",
+            "content_desc_data_backup" to "數據備份",
+            "content_desc_export" to "導出",
+            "content_desc_import" to "導入",
+            "content_desc_activity_tag_category" to "活動標籤類別"
         ),
 
         LANG_EN to mapOf(
@@ -429,7 +463,24 @@ object I18n {
             "stats_avg_mood_label" to "Average Mood Rating",
             "stats_distribution_label" to "Mood Distribution Ratio",
             "stats_drivers_label" to "Most Frequent Activity Drivers",
-            "stats_associated_pattern" to "%d logs"
+            "stats_associated_pattern" to "%d logs",
+            "content_desc_theme_settings" to "Theme Settings",
+            "content_desc_lang_settings" to "Language Settings",
+            "lang_zh_cn_display" to "简体中文",
+            "lang_zh_tw_display" to "繁體中文",
+            "lang_en_display" to "English",
+            "lang_ko_display" to "한국어",
+            "lang_ja_display" to "日本語",
+            "content_desc_add_note" to "Add Note",
+            "content_desc_modify_detail" to "Modify Log Detail",
+            "content_desc_remove_mood" to "Directly Remove This Mood",
+            "content_desc_delete_mood_log" to "Delete Mood Log",
+            "content_desc_save_mood" to "Save Mood",
+            "content_desc_empty_analysis" to "No Analysis Log",
+            "content_desc_data_backup" to "Data Backup",
+            "content_desc_export" to "Export",
+            "content_desc_import" to "Import",
+            "content_desc_activity_tag_category" to "Activity Tag Category"
         ),
 
         LANG_KO to mapOf(
@@ -566,7 +617,24 @@ object I18n {
             "stats_avg_mood_label" to "평균 기분 지수",
             "stats_distribution_label" to "기분 상태 분포 비율",
             "stats_drivers_label" to "가장 빈번한 활동 요소",
-            "stats_associated_pattern" to "%d 회 연관"
+            "stats_associated_pattern" to "%d 회 연관",
+            "content_desc_theme_settings" to "테마 설정",
+            "content_desc_lang_settings" to "언어 설정",
+            "lang_zh_cn_display" to "简体中文",
+            "lang_zh_tw_display" to "繁體中文",
+            "lang_en_display" to "English",
+            "lang_ko_display" to "한국어",
+            "lang_ja_display" to "日本語",
+            "content_desc_add_note" to "노트 추가",
+            "content_desc_modify_detail" to "기록 수정 상세",
+            "content_desc_remove_mood" to "이 기분 직접 제거",
+            "content_desc_delete_mood_log" to "기분 로그 삭제",
+            "content_desc_save_mood" to "기분 저장",
+            "content_desc_empty_analysis" to "분석 로그 없음",
+            "content_desc_data_backup" to "데이터 백업",
+            "content_desc_export" to "내보내기",
+            "content_desc_import" to "불러오기",
+            "content_desc_activity_tag_category" to "활동 카테고리 태그"
         ),
 
         LANG_JA to mapOf(
@@ -703,7 +771,24 @@ object I18n {
             "stats_avg_mood_label" to "平均感情評価",
             "stats_distribution_label" to "感情レベルの構成比率",
             "stats_drivers_label" to "顕著な活動要因",
-            "stats_associated_pattern" to "%d 件関連"
+            "stats_associated_pattern" to "%d 件関連",
+            "content_desc_theme_settings" to "テーマ設定",
+            "content_desc_lang_settings" to "言語設定",
+            "lang_zh_cn_display" to "简体中文",
+            "lang_zh_tw_display" to "繁體中文",
+            "lang_en_display" to "English",
+            "lang_ko_display" to "한국어",
+            "lang_ja_display" to "日本語",
+            "content_desc_add_note" to "日記を追加",
+            "content_desc_modify_detail" to "記録修正詳細",
+            "content_desc_remove_mood" to "この感情を直接削除",
+            "content_desc_delete_mood_log" to "感情ログを削除",
+            "content_desc_save_mood" to "感情を保存",
+            "content_desc_empty_analysis" to "分析ログがありません",
+            "content_desc_data_backup" to "データバックアップ",
+            "content_desc_export" to "エクスポート",
+            "content_desc_import" to "インポート",
+            "content_desc_activity_tag_category" to "活動カテゴリタグ"
         )
     )
 
