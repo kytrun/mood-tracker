@@ -15,6 +15,29 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Verify Secrets
+        run: |
+          errors=0
+          if [ -z "${{ secrets.SIGNING_KEY }}" ]; then
+            echo "::error::Secret 'SIGNING_KEY' is empty or missing! Please add it in GitHub Settings -> Secrets and variables -> Actions."
+            errors=$((errors+1))
+          fi
+          if [ -z "${{ secrets.ALIAS }}" ]; then
+            echo "::error::Secret 'ALIAS' is empty or missing! Please add it in GitHub Settings -> Secrets and variables -> Actions."
+            errors=$((errors+1))
+          fi
+          if [ -z "${{ secrets.KEY_STORE_PASSWORD }}" ]; then
+            echo "::error::Secret 'KEY_STORE_PASSWORD' is empty or missing! Please add it in GitHub Settings -> Secrets and variables -> Actions."
+            errors=$((errors+1))
+          fi
+          if [ -z "${{ secrets.KEY_PASSWORD }}" ]; then
+            echo "::error::Secret 'KEY_PASSWORD' is empty or missing! Please add it in GitHub Settings -> Secrets and variables -> Actions."
+            errors=$((errors+1))
+          fi
+          if [ $errors -ne 0 ]; then
+            exit 1
+          fi
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
