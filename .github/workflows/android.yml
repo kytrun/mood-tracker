@@ -6,6 +6,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant Execute Permission to Gradlew
+        run: chmod +x gradlew
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --no-daemon
+
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         # ID used to access action output
@@ -20,8 +38,7 @@ jobs:
           # override default build-tools version (33.0.0) -- optional
           BUILD_TOOLS_VERSION: "34.0.0"
     
-      # Example use of `signedReleaseFile` output -- not needed
       - uses: actions/upload-artifact@v4
         with:
-          name: Signed app bundle
+          name: Signed release APK
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
