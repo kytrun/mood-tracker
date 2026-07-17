@@ -102,7 +102,7 @@
 ### 1. 克隆项目
 ```bash
 git clone <repository_url>
-cd mood-log
+cd mood-tracker
 ```
 
 ### 2. 编译项目
