@@ -40,8 +40,8 @@
 
 <p align="center">
   <img src="assets/微信图片_20260717100651_212_40.jpg" alt="应用截图 1" width="30%" style="border-radius: 12px; margin: 1%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
-  <img src="assets/微信图片_20260717100652_213_40.jpg" alt="应用截图 2" width="30%" style="border-radius: 12px; margin: 1%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
-  <img src="assets/微信图片_20260717100652_214_40.jpg" alt="应用截图 3" width="30%" style="border-radius: 12px; margin: 1%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  <img src="assets/微信图片_20260717100652_214_40.jpg" alt="应用截图 2" width="30%" style="border-radius: 12px; margin: 1%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  <img src="assets/微信图片_20260717100652_213_40.jpg" alt="应用截图 3" width="30%" style="border-radius: 12px; margin: 1%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
 </p>
 
 ---
