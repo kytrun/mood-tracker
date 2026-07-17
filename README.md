@@ -1,4 +1,4 @@
-# 📅 心情日志 (Mood Log)
+# 📅 心情日志 (Mood Tracker)
 
 <p align="center">
   <img src="assets/logo.png" alt="Mood Log Logo" width="120" style="border-radius: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" />
